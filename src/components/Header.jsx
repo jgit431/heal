@@ -75,14 +75,19 @@ export default function Header() {
             ))}
           </nav>
 
+          {/* Three hairlines that fold into a cross when open. The word
+              "Menu" was too easily read as the food menu. */}
           <button
             type="button"
-            className="nav-toggle"
+            className={`nav-toggle ${menuOpen ? 'is-open' : ''}`.trim()}
             aria-expanded={menuOpen}
             aria-controls="nav-panel"
+            aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
             onClick={() => setMenuOpen((open) => !open)}
           >
-            {menuOpen ? 'Close' : 'Menu'}
+            <span className="nav-toggle__line" />
+            <span className="nav-toggle__line" />
+            <span className="nav-toggle__line" />
           </button>
         </div>
       </header>

@@ -260,7 +260,12 @@ export const contact = {
    */
   formEndpoint: '',
 
-  subjects: ['A class', 'A booking', 'Private hire', 'Something else']
+  subjects: ['A class', 'A booking', 'Private hire', 'Something else'],
+
+  // From Google Maps: find the place, Share, Embed a map, then copy the src
+  // out of the iframe it gives you. No API key involved.
+  mapEmbedUrl:
+    'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d827.5633220632711!2d35.590937269626046!3d33.934612998325115!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzPCsDU2JzA0LjYiTiAzNcKwMzUnMjkuNyJF!5e0!3m2!1sen!2sus!4v1788778649483!5m2!1sen!2sus'
 }
 
 /**

@@ -109,15 +109,6 @@ export default function Contact() {
                 <a href={`mailto:${site.email}`}>{site.email}</a>
               </p>
             </div>
-
-            <div className="contact-block">
-              <p className="contact-block__label">Open</p>
-              {site.hours.map((row) => (
-                <p className="note" key={row.days}>
-                  {row.days}: {row.cafe}
-                </p>
-              ))}
-            </div>
           </Reveal>
 
           <Reveal delay={100}>
@@ -203,6 +194,32 @@ export default function Contact() {
                 )}
               </div>
             </div>
+          </Reveal>
+        </div>
+
+        {/* Second row on the same column structure: hours, then the map.
+            The embed is lazy, so it costs nothing until scrolled to. */}
+        <div className="contact-grid contact-grid--second">
+          <Reveal>
+            <div className="contact-block">
+              <p className="contact-block__label">Open</p>
+              {site.hours.map((row) => (
+                <p className="note" key={row.days}>
+                  {row.days}: {row.cafe}
+                </p>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal delay={100} className="contact-map">
+            <iframe
+              className="contact-map__frame"
+              src={contact.mapEmbedUrl}
+              title={`${site.legalName} on the map`}
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
           </Reveal>
         </div>
       </section>
