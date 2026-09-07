@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1100" width="1800" height="1100" role="img">
+  <defs>
+    <linearGradient id="field" x1="0" y1="0" x2="1" y2="1"
+      gradientTransform="rotate(20 0.5 0.5)">
+      <stop offset="0%" stop-color="#E4DED1"/>
+      <stop offset="52%" stop-color="#C8BFAC"/>
+      <stop offset="100%" stop-color="#A79C86"/>
+    </linearGradient>
+    <radialGradient id="light" cx="28%" cy="18%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <filter id="soften">
+      <feGaussianBlur stdDeviation="81.81818181818181"/>
+    </filter>
+  </defs>
+
+  <rect width="1800" height="1100" fill="url(#field)"/>
+
+  <!-- Two soft shapes so the field is not flat: a broad horizon and a pool of light. -->
+  <g filter="url(#soften)" opacity="0.55">
+    <ellipse cx="576.0" cy="308.00000000000006" rx="756.0" ry="330.0" fill="#E4DED1" opacity="0.7"/>
+    <ellipse cx="1332.0" cy="858.0" rx="828.0" ry="374.0" fill="#A79C86" opacity="0.5"/>
+  </g>
+
+  <rect width="1800" height="1100" fill="url(#light)"/>
+
+  <!-- Grain, so it reads as a surface rather than a gradient. -->
+  <rect width="1800" height="1100" filter="url(#grain)" opacity="0.14"/>
+</svg>

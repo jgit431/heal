@@ -1,0 +1,741 @@
+/* =========================================================================
+   pages.css — layout for each page. Tokens and chrome are in base.css.
+   Sections are namespaced per page (.home-*, .place-*, .menu-*, …) so
+   nothing here can collide with anything else.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   Home — hero slideshow
+   The hero is the whole first screen: photography, one line of type set low
+   and left, and a caption on the right that names the picture you are
+   looking at. The images crossfade slowly and drift a fraction while they do.
+   ------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  min-height: 85svh; /* 15% short of full screen; also closes the gap under the header */
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  color: var(--ground-soft);
+  background: var(--ground-deep);
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1800ms var(--ease);
+}
+
+.hero__slide.is-current {
+  opacity: 1;
+}
+
+.hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.04);
+  transition: transform 9000ms linear;
+}
+
+.hero__slide.is-current .hero__img {
+  transform: scale(1);
+}
+
+/* Darkens the lower half only, so the type stays legible without flattening
+   the whole photograph. */
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(30, 33, 28, 0.28) 0%,
+    rgba(30, 33, 28, 0.1) 34%,
+    rgba(30, 33, 28, 0.52) 100%
+  );
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-4);
+}
+
+.hero__line {
+  font-family: var(--font-display);
+  font-size: var(--t-hero);
+  line-height: 1.02;
+  white-space: pre-line; /* the copy carries its own line breaks */
+  margin: 0;
+}
+
+.hero__note {
+  margin-top: var(--s-3);
+  max-width: 34ch;
+  font-size: var(--t-sm);
+  letter-spacing: 0.06em;
+  opacity: 0.86;
+}
+
+.hero__aside {
+  flex: 0 0 auto;
+  text-align: right;
+  padding-bottom: 0.35rem;
+}
+
+.hero__caption {
+  font-size: var(--t-sm);
+  letter-spacing: 0.08em;
+  opacity: 0.86;
+  min-height: 1.6em;
+}
+
+/* Slide indicators: one hairline per image, the current one filled. */
+.hero__dots {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.hero__dot {
+  width: 30px;
+  height: 1px;
+  padding: 0.6rem 0; /* invisible tap target around the 1px rule */
+  background: transparent;
+  position: relative;
+}
+
+.hero__dot::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.4;
+  transition: opacity 400ms var(--ease);
+}
+
+.hero__dot.is-current::before,
+.hero__dot:hover::before {
+  opacity: 1;
+}
+
+/* Home hero, small screens: the caption block moves under the line. */
+@media (max-width: 820px) {
+  .hero__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero__aside {
+    text-align: left;
+    width: 100%;
+  }
+
+  .hero__dots {
+    justify-content: flex-start;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Home — the two halves (studio / cafe)
+   ------------------------------------------------------------------------- */
+.home-halves {
+  display: grid;
+  gap: var(--band);
+}
+
+.home-half {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: center;
+}
+
+/* The second half mirrors the first so the eye crosses the page. */
+.home-half--flip .home-half__figure {
+  order: 2;
+}
+
+.home-half__figure {
+  margin: 0;
+  overflow: hidden;
+  background: var(--ground-deep);
+}
+
+.home-half__img {
+  width: 100%;
+  aspect-ratio: 5 / 6;
+  object-fit: cover;
+}
+
+.home-half__heading {
+  font-size: var(--t-xl);
+}
+
+.home-half__body {
+  margin-top: var(--s-2);
+  color: var(--ink-soft);
+  max-width: 38ch;
+}
+
+.home-half__link {
+  margin-top: var(--s-3);
+}
+
+@media (max-width: 820px) {
+  .home-half {
+    grid-template-columns: 1fr;
+  }
+
+  .home-half--flip .home-half__figure {
+    order: 0;
+  }
+
+  .home-half__img {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Home — hours
+   A table of when the two sides of the room are open. Hairlines carry the
+   structure; there is no card, no box, no shadow.
+   ------------------------------------------------------------------------- */
+.home-hours__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr;
+  gap: var(--s-3);
+  padding-block: var(--s-3);
+  border-top: 1px solid var(--line);
+  align-items: baseline;
+}
+
+.home-hours__row:last-of-type {
+  border-bottom: 1px solid var(--line);
+}
+
+.home-hours__days {
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+}
+
+.home-hours__label {
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+@media (max-width: 700px) {
+  .home-hours__row {
+    grid-template-columns: 1fr;
+    gap: var(--s-2);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Home — closing image
+   ------------------------------------------------------------------------- */
+.home-closing__figure {
+  margin: 0;
+  background: var(--ground-deep);
+  overflow: hidden;
+}
+
+.home-closing__img {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+}
+
+.home-closing__line {
+  margin-top: var(--s-3);
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  max-width: none; /* overrides the 62ch ceiling on p; keeps it to one line */
+}
+
+/* -------------------------------------------------------------------------
+   The Place
+   ------------------------------------------------------------------------- */
+.place-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.place-gallery__figure {
+  margin: 0;
+  background: var(--ground-deep);
+  overflow: hidden;
+}
+
+.place-gallery__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The first picture is the tall one and holds the left column on its own. */
+.place-gallery__figure:nth-child(1) {
+  grid-row: span 2;
+}
+
+.place-gallery__figure:nth-child(1) .place-gallery__img {
+  aspect-ratio: 3 / 4;
+}
+
+.place-gallery__figure:nth-child(2) .place-gallery__img,
+.place-gallery__figure:nth-child(3) .place-gallery__img {
+  aspect-ratio: 3 / 2;
+}
+
+.place-gallery__figure:nth-child(4) {
+  grid-column: span 2;
+}
+
+.place-gallery__figure:nth-child(4) .place-gallery__img {
+  aspect-ratio: 21 / 8;
+}
+
+.place-section {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: var(--s-3) clamp(2rem, 6vw, 6rem);
+  padding-block: var(--s-4);
+  border-top: 1px solid var(--line);
+}
+
+.place-section:last-of-type {
+  border-bottom: 1px solid var(--line);
+}
+
+.place-section__heading {
+  font-size: var(--t-lg);
+}
+
+.place-section__body {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 820px) {
+  .place-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .place-gallery__figure:nth-child(1) {
+    grid-row: auto;
+  }
+
+  .place-gallery__figure:nth-child(4) {
+    grid-column: auto;
+  }
+
+  .place-gallery__figure .place-gallery__img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .place-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Classes
+   ------------------------------------------------------------------------- */
+.classes-levels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-3) var(--s-4);
+}
+
+.classes-level__name {
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  margin-bottom: 0.3rem;
+}
+
+.classes-level__note {
+  color: var(--ink-soft);
+  font-size: var(--t-sm);
+  max-width: 30ch;
+}
+
+.classes-day {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: var(--s-2) clamp(1.5rem, 5vw, 5rem);
+  padding-block: var(--s-3);
+  border-top: 1px solid var(--line);
+}
+
+.classes-day:last-of-type {
+  border-bottom: 1px solid var(--line);
+}
+
+.classes-day__name {
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+}
+
+.classes-day__sessions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.classes-session {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto auto;
+  gap: var(--s-2);
+  align-items: baseline;
+}
+
+.classes-session__time {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.classes-session__level,
+.classes-session__teacher {
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+}
+
+.classes-session__level {
+  color: var(--moss);
+}
+
+.classes-prices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(2rem, 6vw, 6rem);
+}
+
+.classes-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-2);
+  padding-block: var(--s-2);
+  border-top: 1px solid var(--line);
+}
+
+.classes-price__note {
+  display: block;
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+}
+
+.classes-price__amount {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  white-space: nowrap;
+}
+
+@media (max-width: 820px) {
+  .classes-levels,
+  .classes-prices {
+    grid-template-columns: 1fr;
+  }
+
+  .classes-day {
+    grid-template-columns: 1fr;
+  }
+
+  .classes-session {
+    grid-template-columns: 4rem 1fr auto;
+  }
+
+  .classes-session__teacher {
+    grid-column: 2 / -1;
+    margin-top: -0.5rem;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Menu
+   Set like a printed menu: group name in the margin, items in a column of
+   hairline rows, price aligned right.
+   ------------------------------------------------------------------------- */
+.menu-group {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--s-3) clamp(2rem, 6vw, 6rem);
+  padding-block: var(--s-4);
+  border-top: 1px solid var(--line);
+}
+
+.menu-groups {
+  border-bottom: 1px solid var(--line);
+}
+
+.menu-group__heading {
+  font-size: var(--t-xl);
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-3);
+  padding-block: 0.85rem;
+  border-top: 1px solid var(--line);
+}
+
+.menu-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.menu-item__name {
+  font-size: var(--t-md);
+}
+
+.menu-item__description {
+  display: block;
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  margin-top: 0.15rem;
+  max-width: 42ch;
+}
+
+.menu-item__price {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* Dietary markers, set on the item's own line just after its name. */
+.menu-tags {
+  display: inline-flex;
+  gap: 0.35rem;
+  margin-left: 0.55rem;
+}
+
+.menu-tag {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--moss);
+  text-decoration: none;      /* abbr underlines itself in some browsers */
+  border-bottom: 0;
+  cursor: help;
+  white-space: nowrap;
+}
+
+.menu-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem clamp(1.25rem, 3vw, 2.5rem);
+  margin-top: var(--s-4);
+  padding-top: var(--s-2);
+}
+
+.menu-legend__item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+}
+
+.menu-footnote {
+  margin-top: var(--s-2);
+  color: var(--ink-soft);
+  max-width: none; /* one line; overrides the 62ch ceiling on p */
+}
+
+@media (max-width: 820px) {
+  .menu-group {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Contact
+   ------------------------------------------------------------------------- */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: var(--s-5) clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.contact-block {
+  padding-block: var(--s-3);
+  border-top: 1px solid var(--line);
+}
+
+.contact-block:last-of-type {
+  border-bottom: 1px solid var(--line);
+}
+
+.contact-block__label {
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin-bottom: 0.4rem;
+}
+
+.contact-block__value {
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  line-height: 1.3;
+}
+
+.contact-block__value a:hover,
+.contact-block__value a:focus-visible {
+  color: var(--moss);
+}
+
+/* Form: underlines only. No boxes, nothing to fill in that we do not need. */
+.form {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field__label {
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+
+.field__input,
+.field__textarea,
+.field__select {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  padding: 0.6rem 0;
+  border-radius: 0;
+  transition: border-color 380ms var(--ease);
+}
+
+.field__input:focus,
+.field__textarea:focus,
+.field__select:focus {
+  outline: none;
+  border-bottom-color: var(--moss);
+}
+
+.field__textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-3);
+  margin-top: var(--s-1);
+}
+
+/* Result of the last send attempt, in line with the button. */
+.form__status {
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+}
+
+.form__status--sent {
+  color: var(--moss);
+}
+
+.button[disabled] {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@media (max-width: 820px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Gallery
+   ------------------------------------------------------------------------- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.5rem, 1.6vw, 1rem);
+}
+
+.gallery-grid__item {
+  display: block;
+  overflow: hidden;
+  background: var(--ground-deep);
+}
+
+.gallery-grid__img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  transition: transform 900ms var(--ease);
+}
+
+.gallery-grid__item:hover .gallery-grid__img,
+.gallery-grid__item:focus-visible .gallery-grid__img {
+  transform: scale(1.03);
+}
+
+.gallery-link {
+  color: var(--moss);
+  border-bottom: 1px solid currentColor;
+  transition: opacity 380ms var(--ease);
+}
+
+.gallery-link:hover,
+.gallery-link:focus-visible {
+  opacity: 0.65;
+}
+
+@media (max-width: 820px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Not found
+   ------------------------------------------------------------------------- */
+.notfound {
+  padding-top: calc(var(--header-h) + clamp(4rem, 10vw, 8rem));
+  padding-bottom: var(--band);
+}
+
+.notfound__title {
+  font-size: var(--t-2xl);
+}
+
+.notfound__body {
+  margin-top: var(--s-2);
+  color: var(--ink-soft);
+}
+
+.notfound__link {
+  margin-top: var(--s-3);
+}
